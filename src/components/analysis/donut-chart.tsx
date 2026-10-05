@@ -25,7 +25,15 @@ export const DonutChart: React.FC<DonutChartProps> = ({
   const strokeWidth = 14;
   const circumference = 2 * Math.PI * radius;
 
-  let accumulatedPercentage = 0;
+  const segmentsWithOffsets = segments.map((seg, idx) => {
+    const priorPercentage = segments
+      .slice(0, idx)
+      .reduce((sum, s) => sum + s.percentage, 0);
+    return {
+      ...seg,
+      strokeOffset: (priorPercentage / 100) * circumference,
+    };
+  });
 
   return (
     <div className="relative flex items-center justify-center shrink-0">
@@ -46,10 +54,8 @@ export const DonutChart: React.FC<DonutChartProps> = ({
         />
 
         {/* Segments */}
-        {segments.map((seg) => {
+        {segmentsWithOffsets.map((seg) => {
           const strokeLength = (seg.percentage / 100) * circumference;
-          const strokeOffset = (accumulatedPercentage / 100) * circumference;
-          accumulatedPercentage += seg.percentage;
 
           return (
             <circle
@@ -61,7 +67,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
               stroke={seg.color}
               strokeWidth={strokeWidth}
               strokeDasharray={`${Math.max(0, strokeLength - 1.5)} ${circumference}`}
-              strokeDashoffset={-strokeOffset}
+              strokeDashoffset={-seg.strokeOffset}
               strokeLinecap="round"
               className="transition-all duration-700 ease-out"
             />

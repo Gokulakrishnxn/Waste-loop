@@ -14,14 +14,14 @@ export function calculateWasteStreams(input: WasteStreamCalculationInput): {
   const { constructionTonnes, operationalTonnes, buildingType, selectedMaterials } = input;
 
   // Base construction weights
-  let concreteWeight = selectedMaterials.includes("concrete") ? 52 : 30;
-  let brickWeight = selectedMaterials.includes("brick") ? 20 : 8;
-  let timberWeight = selectedMaterials.includes("timber") ? 14 : 8;
-  let metalWeight = selectedMaterials.includes("steel") ? 10 : 5;
-  let glassGypsumWeight =
+  const concreteWeight = selectedMaterials.includes("concrete") ? 52 : 30;
+  const brickWeight = selectedMaterials.includes("brick") ? 20 : 8;
+  const timberWeight = selectedMaterials.includes("timber") ? 14 : 8;
+  const metalWeight = selectedMaterials.includes("steel") ? 10 : 5;
+  const glassGypsumWeight =
     (selectedMaterials.includes("glass") ? 4 : 2) +
     (selectedMaterials.includes("gypsum") ? 4 : 2);
-  let mixedWeight = 8;
+  const mixedWeight = 8;
 
   const totalConstWeight =
     concreteWeight +

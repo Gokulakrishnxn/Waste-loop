@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-6 lg:gap-10">
             <div className="flex items-center gap-1.5 text-[#1D1D1F]">
               <span className="text-lg font-bold tracking-tight">WASTE</span>
-              <span className="text-[#1D7A4B] font-extrabold text-lg">//</span>
+              <span className="text-[#1D7A4B] font-extrabold text-lg">{"//"}</span>
               <span className="text-lg font-bold tracking-tight">LOOP</span>
             </div>
 
