@@ -1,48 +1,39 @@
 import React from "react";
-import { Sun } from "lucide-react";
 
 export const Header: React.FC = () => {
   return (
-    <header className="w-full border-b border-white/[0.06] bg-[#060807]/90 backdrop-blur-md sticky top-0 z-50">
-      <div className="mx-auto max-w-[1520px] px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
-          {/* Left: Brand and Workflow Pipeline */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-1.5 font-bold tracking-tight text-white text-lg">
-              <span className="tracking-wider">WASTE</span>
-              <span className="text-[#C8FF4A] tracking-tighter font-extrabold">//</span>
-              <span className="tracking-wider">LOOP</span>
+    <header className="w-full bg-white/80 backdrop-blur-xl sticky top-0 z-50 border-b border-black/[0.04]">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="flex h-14 sm:h-16 items-center justify-between">
+          {/* Brand */}
+          <div className="flex items-center gap-5 sm:gap-8">
+            <div className="flex items-center gap-1 text-[#1D1D1F]">
+              <span className="text-base sm:text-lg font-semibold tracking-tight">WASTE</span>
+              <span className="text-[#1D7A4B] font-bold text-base sm:text-lg">//</span>
+              <span className="text-base sm:text-lg font-semibold tracking-tight">LOOP</span>
             </div>
 
-            <div className="hidden md:flex items-center gap-2 text-[11px] font-medium tracking-wider text-[#7E8D82] uppercase">
-              <span>BUILD</span>
-              <span className="text-white/20">→</span>
-              <span>USE</span>
-              <span className="text-white/20">→</span>
-              <span>MAINTAIN</span>
-              <span className="text-white/20">→</span>
-              <span>RECOVER</span>
+            <div className="hidden md:flex items-center gap-2 text-[11px] font-medium tracking-widest text-[#86868B] uppercase">
+              <span>Build</span>
+              <span className="text-[#D1D1D6]">→</span>
+              <span>Use</span>
+              <span className="text-[#D1D1D6]">→</span>
+              <span>Maintain</span>
+              <span className="text-[#D1D1D6]">→</span>
+              <span>Recover</span>
             </div>
           </div>
 
-          {/* Right: Status Pills & Mode */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-[#0C100D] px-3 py-1 text-xs text-[#A8B6AC]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]" />
-              <span className="font-medium text-[11px]">Intelligence Engine</span>
+          {/* Right: Status */}
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2 rounded-full bg-[#F5F5F7] px-3 py-1.5 text-[11px] text-[#6E6E73] font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#34C759] shadow-[0_0_6px_#34C759]" />
+              <span className="hidden sm:inline">Intelligence Active</span>
             </div>
 
-            <div className="hidden sm:inline-flex rounded-full border border-white/[0.08] bg-[#0C100D] px-3.5 py-1 text-[11px] font-medium text-[#C8D6CC]">
+            <div className="hidden sm:inline-flex rounded-full bg-[#F5F5F7] px-3 py-1.5 text-[11px] font-medium text-[#6E6E73]">
               Building Waste Calculator
             </div>
-
-            <button
-              type="button"
-              aria-label="Toggle theme"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-[#0C100D] text-[#8E9B92] hover:text-white transition-colors cursor-pointer"
-            >
-              <Sun className="h-4 w-4" />
-            </button>
           </div>
         </div>
       </div>

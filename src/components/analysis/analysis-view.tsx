@@ -13,70 +13,67 @@ interface AnalysisViewProps {
 
 export const AnalysisView: React.FC<AnalysisViewProps> = ({ result }) => {
   return (
-    <div className="space-y-6 animate-fadeIn">
-      {/* 02 / Waste Analysis Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/[0.06] pb-4">
-        <div className="flex items-baseline gap-3">
-          <span className="text-3xl font-light text-[#C8FF4A] leading-none">02</span>
-          <div>
-            <h2 className="text-lg font-bold text-white tracking-tight">Waste Analysis</h2>
-            <p className="text-xs text-[#8E9B92] mt-0.5">
-              Holistic lifecycle waste modeling across construction, operation and maintenance.
-            </p>
-          </div>
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
+      {/* Section Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-black/[0.06]">
+        <div>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1D1D1F] tracking-tight">
+            Waste Analysis
+          </h2>
+          <p className="text-[13px] text-[#86868B] mt-1">
+            Lifecycle waste modeling across construction, operation and maintenance.
+          </p>
         </div>
 
-        {/* Total In-Use Waste Pill */}
-        <div className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#0A0D0B] px-4 py-2 self-start sm:self-auto shadow-lg">
-          <div className="h-8 w-8 rounded-lg bg-[#C8FF4A]/10 border border-[#C8FF4A]/20 flex items-center justify-center shrink-0">
-            <Recycle className="h-4 w-4 text-[#C8FF4A]" />
+        {/* Total Pill */}
+        <div className="flex items-center gap-3 glass-card px-4 py-2.5 self-start sm:self-auto">
+          <div className="h-8 w-8 rounded-lg bg-[#1D7A4B]/10 flex items-center justify-center shrink-0">
+            <Recycle className="h-4 w-4 text-[#1D7A4B]" />
           </div>
           <div>
-            <div className="text-[10px] text-[#7E8D82] uppercase tracking-wider font-mono">
+            <div className="text-[10px] text-[#AEAEB2] uppercase tracking-wider font-medium">
               Total In-Use Waste
             </div>
-            <div className="text-sm font-bold text-white">
+            <div className="text-[15px] font-bold text-[#1D1D1F]">
               {result.annualInUseTonnes.toLocaleString()}{" "}
-              <span className="text-xs font-normal text-[#8E9B92]">t / year</span>
+              <span className="text-[13px] font-normal text-[#86868B]">t / year</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 3 Primary Metric Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* 3 Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <MetricCard
           label="Construction Waste"
           value={result.constructionTonnes.toLocaleString()}
           unit="t"
-          subtext="Estimated total construction waste"
-          badge="EMBODIED"
-          accent="lime"
+          subtext="Total construction waste"
+          badge="Embodied"
+          accent="green"
         />
-
         <MetricCard
           label="Operational Waste"
           value={result.operationalYearTonnes.toLocaleString()}
           unit="t / year"
-          subtext="Occupant-generated annual waste"
-          badge="OCCUPANCY"
-          accent="cyan"
+          subtext="Annual occupant-generated"
+          badge="Occupancy"
+          accent="blue"
         />
-
         <MetricCard
           label="Maintenance Waste"
           value={result.maintenanceYearTonnes.toLocaleString()}
           unit="t / year"
-          subtext="Climate-adjusted annual estimate"
-          badge="LIFECYCLE"
-          accent="amber"
+          subtext="Climate-adjusted annual"
+          badge="Lifecycle"
+          accent="purple"
         />
       </div>
 
-      {/* Site + Climate Card */}
+      {/* Climate Card */}
       <ClimateCard climate={result.climate} />
 
-      {/* 03 / Waste Streams */}
+      {/* Waste Streams */}
       <WasteStreams
         constructionStreams={result.wasteStreams.construction}
         operationalStreams={result.wasteStreams.operational}
@@ -85,10 +82,10 @@ export const AnalysisView: React.FC<AnalysisViewProps> = ({ result }) => {
         maintenanceTotalTonnes={result.maintenanceYearTonnes}
       />
 
-      {/* 04 / Management Plan */}
+      {/* Management Plan */}
       <ManagementTable items={result.managementPlan} />
 
-      {/* Calculation Transparency */}
+      {/* Transparency */}
       <CalculationTransparency breakdown={result.breakdown} />
     </div>
   );

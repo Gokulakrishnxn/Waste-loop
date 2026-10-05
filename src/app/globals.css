@@ -2,85 +2,125 @@
 
 @layer base {
   :root {
-    --background: #060807;
-    --foreground: #f3f5f4;
-    --surface: #0a0d0b;
-    --surface-elevated: #0f1411;
-    --surface-hover: #141a16;
-    --card: #0a0d0b;
-    --card-foreground: #f3f5f4;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.15);
-    --primary: #c8ff4a;
-    --primary-foreground: #060807;
-    --accent-lime: #c8ff4a;
-    --accent-cyan: #67e8d1;
-    --accent-amber: #f5b94c;
-    --muted: #141a16;
-    --muted-foreground: #8e9b92;
-    --radius: 0.75rem;
+    /* Steve Jobs palette: purity, clarity, precision */
+    --background: #FAFAFA;
+    --foreground: #1D1D1F;
+    --surface: #FFFFFF;
+    --surface-hover: #F5F5F7;
+    --surface-elevated: #FFFFFF;
+    --card: #FFFFFF;
+    --card-foreground: #1D1D1F;
+    --border: rgba(0, 0, 0, 0.06);
+    --border-strong: rgba(0, 0, 0, 0.12);
+    --primary: #1D7A4B;
+    --primary-light: #22924F;
+    --primary-foreground: #FFFFFF;
+    --accent-construction: #1D7A4B;
+    --accent-operational: #0071E3;
+    --accent-maintenance: #BF5AF2;
+    --muted: #F5F5F7;
+    --muted-foreground: #86868B;
+    --destructive: #FF3B30;
+    --radius: 1rem;
+    --text-primary: #1D1D1F;
+    --text-secondary: #6E6E73;
+    --text-tertiary: #86868B;
+    --text-quaternary: #AEAEB2;
   }
 }
 
+/* ── Base Reset ───────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #060807;
-  color: #f3f5f4;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  selection-background-color: #c8ff4a;
-  selection-color: #060807;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02", "cv01";
+  letter-spacing: -0.01em;
 }
 
 ::selection {
-  background-color: #c8ff4a;
-  color: #060807;
+  background-color: #1D7A4B;
+  color: #FFFFFF;
 }
 
-/* Custom subtle scrollbar */
+/* ── Scrollbar (whisper-thin, Jobs-style) ─────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #060807;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #19221c;
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a382e;
+  background: rgba(0, 0, 0, 0.25);
 }
 
-/* Background topographic / architectural contour lines effect */
-.bg-topo-pattern {
-  background-color: #060807;
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(200, 255, 74, 0.05), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(103, 232, 209, 0.03), transparent 50%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-}
-
-/* Subtle lime glow */
-.glow-lime-sm {
-  box-shadow: 0 0 16px -2px rgba(200, 255, 74, 0.25);
-}
-
-.glow-lime {
-  box-shadow: 0 0 24px -3px rgba(200, 255, 74, 0.35);
-}
-
-/* Custom input reset */
+/* ── Number Input Spinner Reset ───────────────────────── */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* ── Smooth Entrance Animations ───────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Glass Card (Jobs-style frosted depth) ────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Subtle focus ring ────────────────────────────────── */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(29, 122, 75, 0.25);
 }

@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  themeColor: "#060807",
+  maximumScale: 5,
+  themeColor: "#FAFAFA",
 };
 
 export default function RootLayout({
@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full antialiased">
-      <body className="min-h-full flex flex-col bg-[#060807] text-[#F3F5F4] bg-topo-pattern selection:bg-[#C8FF4A] selection:text-[#060807]">
+    <html lang="en" className="h-full antialiased">
+      <body className="min-h-full flex flex-col bg-[#FAFAFA] text-[#1D1D1F]">
         {children}
       </body>
     </html>

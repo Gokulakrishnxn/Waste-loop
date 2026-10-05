@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowRight, Building2, Check, ChevronDown, Loader2, MapPin, Play, Users, X } from "lucide-react";
+import { ArrowRight, Building2, Check, ChevronDown, Loader2, MapPin, Users, X } from "lucide-react";
 import { BUILDING_SCALE_CONFIG, BUILDING_TYPE_CONFIG, MATERIAL_CONFIG } from "@/lib/calculator/factors";
 import { BuildingScale, BuildingType, Material, ProjectInput } from "@/lib/calculator/types";
 
@@ -83,48 +83,51 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   ];
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0A0D0B] p-5 sm:p-6 shadow-2xl relative">
-      {/* Subtle corner contour accent */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-radial from-[#C8FF4A]/5 to-transparent pointer-events-none rounded-tr-2xl" />
-
-      {/* Header */}
-      <div className="flex items-start justify-between border-b border-white/[0.06] pb-4 mb-5">
-        <div className="flex items-baseline gap-3">
-          <span className="text-3xl font-light text-[#526056] leading-none">01</span>
+    <div className="glass-card p-5 sm:p-7 relative animate-scaleIn">
+      {/* Section Header */}
+      <div className="pb-5 mb-5 border-b border-black/[0.06]">
+        <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-white tracking-tight">Project Input</h2>
-            <p className="text-xs text-[#8E9B92] mt-0.5">
-              Enter your building details to estimate waste across its lifecycle.
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1D1D1F] tracking-tight">
+              Project Input
+            </h2>
+            <p className="text-[13px] text-[#86868B] mt-1 leading-relaxed">
+              Enter building details to estimate lifecycle waste.
             </p>
           </div>
-        </div>
-        <div className="rounded-full border border-[#2E3C32] bg-[#0E1410] px-2.5 py-0.5 text-[10px] font-mono tracking-wider text-[#A2B2A6] uppercase">
-          ESTIMATION TOOL
+          <span className="hidden sm:inline-flex text-[10px] font-medium tracking-widest text-[#AEAEB2] uppercase bg-[#F5F5F7] px-2.5 py-1 rounded-full">
+            Estimation
+          </span>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* Building Type */}
-        <div className="space-y-1.5 relative">
-          <label className="text-xs font-medium text-[#C5D0C8] block">Building Type</label>
+        <div className="space-y-2 relative">
+          <label className="text-[13px] font-medium text-[#1D1D1F] block">
+            Building Type
+          </label>
           <div className="relative">
             <button
               type="button"
               disabled={isLoading}
               onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
-              className="w-full flex items-center justify-between rounded-xl border border-white/[0.08] bg-[#0E1310] px-3.5 py-2.5 text-xs text-[#F3F5F4] hover:border-white/[0.15] focus:outline-none focus:ring-1 focus:ring-[#C8FF4A] transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between rounded-xl border border-black/[0.08] bg-white px-4 py-3 text-[13px] text-[#1D1D1F] hover:border-black/[0.15] focus:outline-none focus:ring-2 focus:ring-[#1D7A4B]/20 focus:border-[#1D7A4B] transition-all cursor-pointer"
             >
-              <div className="flex items-center gap-2.5 truncate">
-                <Building2 className="h-4 w-4 text-[#8E9B92] shrink-0" />
+              <div className="flex items-center gap-3 truncate">
+                <Building2 className="h-4 w-4 text-[#86868B] shrink-0" />
                 <span className="truncate">
-                  {BUILDING_TYPE_CONFIG[input.buildingType]?.label} ({BUILDING_TYPE_CONFIG[input.buildingType]?.description})
+                  {BUILDING_TYPE_CONFIG[input.buildingType]?.label}
+                </span>
+                <span className="text-[#AEAEB2] text-xs hidden sm:inline">
+                  ({BUILDING_TYPE_CONFIG[input.buildingType]?.description})
                 </span>
               </div>
-              <ChevronDown className="h-4 w-4 text-[#7A8A80] shrink-0" />
+              <ChevronDown className={`h-4 w-4 text-[#AEAEB2] shrink-0 transition-transform ${isTypeDropdownOpen ? "rotate-180" : ""}`} />
             </button>
 
             {isTypeDropdownOpen && (
-              <div className="absolute top-full left-0 mt-1.5 w-full z-30 rounded-xl border border-white/[0.12] bg-[#0E1411] shadow-2xl overflow-hidden py-1">
+              <div className="absolute top-full left-0 mt-2 w-full z-30 rounded-xl border border-black/[0.08] bg-white shadow-xl overflow-hidden py-1 animate-scaleIn">
                 {buildingTypes.map((typeKey) => {
                   const cfg = BUILDING_TYPE_CONFIG[typeKey];
                   const isSelected = input.buildingType === typeKey;
@@ -136,17 +139,17 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                         onChange({ ...input, buildingType: typeKey });
                         setIsTypeDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2 text-left text-xs transition-colors cursor-pointer ${
+                      className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-[13px] transition-colors cursor-pointer ${
                         isSelected
-                          ? "bg-[#C8FF4A]/10 text-[#C8FF4A]"
-                          : "text-[#D8E2DA] hover:bg-[#151D18]"
+                          ? "bg-[#1D7A4B]/8 text-[#1D7A4B] font-medium"
+                          : "text-[#1D1D1F] hover:bg-[#F5F5F7]"
                       }`}
                     >
                       <div className="truncate">
-                        <span className="font-medium">{cfg.label}</span>
-                        <span className="text-[#7A8A80] ml-2 text-[11px]">({cfg.description})</span>
+                        <span>{cfg.label}</span>
+                        <span className="text-[#AEAEB2] ml-2 text-xs">({cfg.description})</span>
                       </div>
-                      {isSelected && <Check className="h-3.5 w-3.5 text-[#C8FF4A] shrink-0" />}
+                      {isSelected && <Check className="h-4 w-4 text-[#1D7A4B] shrink-0" />}
                     </button>
                   );
                 })}
@@ -155,9 +158,11 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </div>
         </div>
 
-        {/* Building Scale: 4 Segmented Cards */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#C5D0C8] block">Building Scale</label>
+        {/* Building Scale */}
+        <div className="space-y-2">
+          <label className="text-[13px] font-medium text-[#1D1D1F] block">
+            Building Scale
+          </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {buildingScales.map((scaleKey) => {
               const cfg = BUILDING_SCALE_CONFIG[scaleKey];
@@ -168,29 +173,29 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                   type="button"
                   disabled={isLoading}
                   onClick={() => onChange({ ...input, buildingScale: scaleKey })}
-                  className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                  className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer ${
                     isSelected
-                      ? "border-[#C8FF4A] bg-[#0E1510] shadow-[0_0_12px_rgba(200,255,74,0.12)] text-[#F3F5F4]"
-                      : "border-white/[0.08] bg-[#0E1310] hover:border-white/[0.15] hover:bg-[#121814] text-[#8E9B92]"
+                      ? "border-[#1D7A4B] bg-[#1D7A4B]/5 ring-1 ring-[#1D7A4B]/15"
+                      : "border-black/[0.08] bg-white hover:border-black/[0.15] hover:bg-[#F5F5F7]"
                   }`}
                 >
-                  <span className={`text-xs font-medium ${isSelected ? "text-white font-semibold" : "text-[#D0DDD4]"}`}>
+                  <span className={`text-[13px] font-medium ${isSelected ? "text-[#1D7A4B]" : "text-[#1D1D1F]"}`}>
                     {cfg.label}
                   </span>
-                  <span className="text-[10px] text-[#6E7E74] mt-0.5">{cfg.range}</span>
+                  <span className="text-[11px] text-[#AEAEB2] mt-0.5">{cfg.range}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Built-up Area & Number of Users (side-by-side) */}
+        {/* Built-up Area & Users */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <label htmlFor="built-up-area" className="text-xs font-medium text-[#C5D0C8] block">
+          <div className="space-y-2">
+            <label htmlFor="built-up-area" className="text-[13px] font-medium text-[#1D1D1F] block">
               Built-up Area
             </label>
-            <div className="relative flex items-center rounded-xl border border-white/[0.08] bg-[#0E1310] px-3 py-2 focus-within:border-[#C8FF4A] transition-colors">
+            <div className="relative flex items-center rounded-xl border border-black/[0.08] bg-white px-4 py-3 focus-within:border-[#1D7A4B] focus-within:ring-2 focus-within:ring-[#1D7A4B]/15 transition-all">
               <input
                 id="built-up-area"
                 type="text"
@@ -199,19 +204,19 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 onChange={(e) => handleAreaChange(e.target.value)}
                 placeholder="10,000"
                 disabled={isLoading}
-                className="w-full bg-transparent text-xs text-[#F3F5F4] placeholder:text-[#526056] focus:outline-none"
+                className="w-full bg-transparent text-[13px] text-[#1D1D1F] placeholder:text-[#D1D1D6] focus:outline-none"
               />
-              <span className="text-[11px] text-[#7A8A80] ml-2 select-none">m²</span>
+              <span className="text-[12px] text-[#AEAEB2] ml-2 select-none font-medium">m²</span>
             </div>
-            {areaError && <p className="text-[11px] text-red-400 mt-1">{areaError}</p>}
+            {areaError && <p className="text-[12px] text-[#FF3B30] mt-1">{areaError}</p>}
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="number-of-users" className="text-xs font-medium text-[#C5D0C8] block">
+          <div className="space-y-2">
+            <label htmlFor="number-of-users" className="text-[13px] font-medium text-[#1D1D1F] block">
               Number of Users
             </label>
-            <div className="relative flex items-center rounded-xl border border-white/[0.08] bg-[#0E1310] px-3 py-2 focus-within:border-[#C8FF4A] transition-colors">
-              <Users className="h-4 w-4 text-[#7A8A80] mr-2 shrink-0" />
+            <div className="relative flex items-center rounded-xl border border-black/[0.08] bg-white px-4 py-3 focus-within:border-[#1D7A4B] focus-within:ring-2 focus-within:ring-[#1D7A4B]/15 transition-all">
+              <Users className="h-4 w-4 text-[#AEAEB2] mr-2.5 shrink-0" />
               <input
                 id="number-of-users"
                 type="text"
@@ -220,19 +225,21 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                 onChange={(e) => handleUsersChange(e.target.value)}
                 placeholder="500"
                 disabled={isLoading}
-                className="w-full bg-transparent text-xs text-[#F3F5F4] placeholder:text-[#526056] focus:outline-none"
+                className="w-full bg-transparent text-[13px] text-[#1D1D1F] placeholder:text-[#D1D1D6] focus:outline-none"
               />
-              <span className="text-[11px] text-[#7A8A80] ml-2 select-none">users</span>
+              <span className="text-[12px] text-[#AEAEB2] ml-2 select-none font-medium">users</span>
             </div>
-            {usersError && <p className="text-[11px] text-red-400 mt-1">{usersError}</p>}
+            {usersError && <p className="text-[12px] text-[#FF3B30] mt-1">{usersError}</p>}
           </div>
         </div>
 
-        {/* Primary Materials: 6 compact cards */}
-        <div className="space-y-1.5">
+        {/* Materials */}
+        <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-medium text-[#C5D0C8] block">Primary Materials</label>
-            <span className="text-[10px] text-[#7A8A80]">Select main construction materials (choose multiple)</span>
+            <label className="text-[13px] font-medium text-[#1D1D1F] block">
+              Primary Materials
+            </label>
+            <span className="text-[11px] text-[#AEAEB2]">Select multiple</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {materialsList.map((mat) => {
@@ -244,26 +251,26 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                   type="button"
                   disabled={isLoading}
                   onClick={() => handleToggleMaterial(mat)}
-                  className={`flex items-start gap-2.5 p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                  className={`flex items-start gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                     isChecked
-                      ? "border-[#C8FF4A] bg-[#0E1611] shadow-[0_0_10px_rgba(200,255,74,0.08)]"
-                      : "border-white/[0.08] bg-[#0E1310] hover:border-white/[0.15] hover:bg-[#121814]"
+                      ? "border-[#1D7A4B] bg-[#1D7A4B]/5 ring-1 ring-[#1D7A4B]/15"
+                      : "border-black/[0.08] bg-white hover:border-black/[0.15] hover:bg-[#F5F5F7]"
                   }`}
                 >
                   <div
                     className={`mt-0.5 h-4 w-4 rounded shrink-0 flex items-center justify-center border transition-colors ${
                       isChecked
-                        ? "border-[#C8FF4A] bg-[#C8FF4A] text-[#060807]"
-                        : "border-[#3A4A3E] bg-[#121714]"
+                        ? "border-[#1D7A4B] bg-[#1D7A4B] text-white"
+                        : "border-[#D1D1D6] bg-white"
                     }`}
                   >
                     {isChecked && <Check className="h-3 w-3 stroke-[3]" />}
                   </div>
                   <div className="min-w-0">
-                    <span className={`block text-[11px] font-medium leading-snug truncate ${isChecked ? "text-white" : "text-[#A8B6AC]"}`}>
+                    <span className={`block text-[12px] font-medium leading-snug truncate ${isChecked ? "text-[#1D7A4B]" : "text-[#1D1D1F]"}`}>
                       {cfg.label}
                     </span>
-                    <span className="block text-[9px] text-[#6E7E74] leading-tight truncate">
+                    <span className="block text-[10px] text-[#AEAEB2] leading-tight truncate mt-0.5">
                       {cfg.description.split(",")[0]}
                     </span>
                   </div>
@@ -273,13 +280,13 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </div>
         </div>
 
-        {/* Site Location */}
-        <div className="space-y-1.5">
-          <label htmlFor="site-location" className="text-xs font-medium text-[#C5D0C8] block">
+        {/* Location */}
+        <div className="space-y-2">
+          <label htmlFor="site-location" className="text-[13px] font-medium text-[#1D1D1F] block">
             Site Location
           </label>
-          <div className="relative flex items-center rounded-xl border border-white/[0.08] bg-[#0E1310] px-3 py-2 focus-within:border-[#C8FF4A] transition-colors">
-            <MapPin className="h-4 w-4 text-[#7A8A80] mr-2 shrink-0" />
+          <div className="relative flex items-center rounded-xl border border-black/[0.08] bg-white px-4 py-3 focus-within:border-[#1D7A4B] focus-within:ring-2 focus-within:ring-[#1D7A4B]/15 transition-all">
+            <MapPin className="h-4 w-4 text-[#AEAEB2] mr-2.5 shrink-0" />
             <input
               id="site-location"
               type="text"
@@ -287,41 +294,40 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               onChange={(e) => onChange({ ...input, location: e.target.value })}
               placeholder="e.g. Chennai, India"
               disabled={isLoading}
-              className="w-full bg-transparent text-xs text-[#F3F5F4] placeholder:text-[#526056] focus:outline-none"
+              className="w-full bg-transparent text-[13px] text-[#1D1D1F] placeholder:text-[#D1D1D6] focus:outline-none"
             />
             {input.location && (
               <button
                 type="button"
                 onClick={() => onChange({ ...input, location: "" })}
-                className="text-[#7A8A80] hover:text-white ml-2 cursor-pointer"
+                className="text-[#AEAEB2] hover:text-[#1D1D1F] ml-2 cursor-pointer transition-colors"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
-          <p className="text-[10px] text-[#6E7E74]">e.g. Chennai, India</p>
         </div>
 
-        {/* Loading Steps Sequence */}
+        {/* Loading Sequence */}
         {isLoading && (
-          <div className="rounded-xl border border-white/[0.08] bg-[#0C100D] p-3 text-xs space-y-2 animate-fadeIn">
-            <div className="flex items-center gap-2 text-[#C8FF4A] font-medium text-[11px]">
-              <Loader2 className="h-3 w-3 animate-spin" />
-              <span>ANALYZING PROJECT</span>
+          <div className="rounded-xl bg-[#F5F5F7] p-4 text-[13px] space-y-2.5 animate-fadeIn">
+            <div className="flex items-center gap-2 text-[#1D7A4B] font-medium text-xs">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <span className="tracking-wide uppercase">Analyzing Project</span>
             </div>
-            <div className="space-y-1 text-[11px]">
+            <div className="space-y-1.5">
               {loadingSteps.map((step, idx) => {
                 const isDone = loadingStep > idx;
                 const isCurrent = loadingStep === idx;
                 return (
                   <div
                     key={step}
-                    className={`flex items-center justify-between ${
-                      isDone ? "text-[#C8FF4A]" : isCurrent ? "text-white" : "text-[#526056]"
+                    className={`flex items-center justify-between text-[13px] ${
+                      isDone ? "text-[#1D7A4B]" : isCurrent ? "text-[#1D1D1F]" : "text-[#D1D1D6]"
                     }`}
                   >
                     <span>{step}</span>
-                    <span>{isDone ? "✓" : isCurrent ? "◌" : "○"}</span>
+                    <span className="text-xs">{isDone ? "✓" : isCurrent ? "◌" : "○"}</span>
                   </div>
                 );
               })}
@@ -329,20 +335,19 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
           </div>
         )}
 
-        {/* Primary Action Button */}
+        {/* Primary CTA */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-xl bg-[#C8FF4A] hover:bg-[#D5FF66] active:bg-[#B8F538] text-[#0A0D0B] font-bold text-sm tracking-wide transition-all shadow-[0_0_20px_rgba(200,255,74,0.2)] hover:shadow-[0_0_28px_rgba(200,255,74,0.35)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          className="w-full h-12 sm:h-[52px] rounded-2xl bg-[#1D7A4B] hover:bg-[#22924F] active:bg-[#176A40] text-white font-semibold text-[15px] tracking-wide transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 shadow-[0_2px_12px_rgba(29,122,75,0.25)] hover:shadow-[0_4px_20px_rgba(29,122,75,0.35)]"
         >
           {isLoading ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin text-[#0A0D0B]" />
-              <span>Analyzing Project...</span>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Analyzing…</span>
             </>
           ) : (
             <>
-              <Play className="h-3.5 w-3.5 fill-[#0A0D0B]" />
               <span>Analyze Waste</span>
               <ArrowRight className="h-4 w-4" />
             </>

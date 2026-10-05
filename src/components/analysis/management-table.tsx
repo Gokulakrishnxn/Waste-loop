@@ -15,30 +15,29 @@ export const ManagementTable: React.FC<ManagementTableProps> = ({ items }) => {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/[0.06] pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-black/[0.06]">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-[#C8FF4A]">04</span>
-            <h3 className="text-lg font-bold text-white tracking-tight">Management Plan</h3>
-          </div>
-          <p className="text-xs text-[#8E9B92] mt-0.5">
+          <h3 className="text-base sm:text-lg font-semibold text-[#1D1D1F] tracking-tight">
+            Management Plan
+          </h3>
+          <p className="text-[13px] text-[#86868B] mt-0.5">
             Actionable segregation and circular diversion pathways.
           </p>
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center rounded-full bg-[#0C100D] p-1 border border-white/[0.08]">
+        <div className="flex items-center rounded-full bg-[#F5F5F7] p-1 self-start sm:self-auto">
           {(["all", "construction", "operational"] as const).map((tab) => (
             <button
               key={tab}
               type="button"
               onClick={() => setFilter(tab)}
-              className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-all cursor-pointer ${
+              className={`rounded-full px-3.5 py-1.5 text-xs font-medium capitalize transition-all cursor-pointer ${
                 filter === tab
-                  ? "bg-[#C8FF4A] font-semibold text-[#060807]"
-                  : "text-[#7E8D82] hover:text-[#D0DDD4]"
+                  ? "bg-white text-[#1D1D1F] shadow-sm font-semibold"
+                  : "text-[#86868B] hover:text-[#1D1D1F]"
               }`}
             >
               {tab}
@@ -48,41 +47,41 @@ export const ManagementTable: React.FC<ManagementTableProps> = ({ items }) => {
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0A0D0B]">
+      <div className="hidden md:block overflow-hidden glass-card rounded-2xl">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-white/[0.06] bg-[#0E1310] text-[#7A8A80] uppercase tracking-wider text-[10px]">
+            <tr className="border-b border-black/[0.06] bg-[#FAFAFA] text-[#86868B] uppercase tracking-wider text-[11px]">
               <th className="py-3 px-5 font-semibold">Waste Stream</th>
               <th className="py-3 px-5 font-semibold text-right">Monthly</th>
               <th className="py-3 px-5 font-semibold text-right">Yearly</th>
               <th className="py-3 px-5 font-semibold">Recommended Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04]">
+          <tbody className="divide-y divide-black/[0.04]">
             {filteredItems.map((row) => (
               <tr
                 key={row.id}
-                className="hover:bg-[#0F1511] transition-colors"
+                className="hover:bg-[#F5F5F7]/70 transition-colors"
               >
-                <td className="py-3.5 px-5 text-white font-medium flex items-center gap-2.5">
+                <td className="py-3.5 px-5 text-[#1D1D1F] font-medium flex items-center gap-2.5">
                   <span
-                    className={`h-2 w-2 rounded-full shrink-0 ${
-                      row.category === "construction" ? "bg-[#C8FF4A]" : "bg-[#67E8D1]"
+                    className={`h-2.5 w-2.5 rounded-full shrink-0 ${
+                      row.category === "construction" ? "bg-[#1D7A4B]" : "bg-[#0071E3]"
                     }`}
                   />
                   <span>{row.stream}</span>
                 </td>
-                <td className="py-3.5 px-5 text-right font-mono text-[#A8B6AC]">
+                <td className="py-3.5 px-5 text-right font-medium text-[#6E6E73]">
                   {row.monthlyTonnes.toLocaleString()} t
                 </td>
-                <td className="py-3.5 px-5 text-right font-mono font-semibold text-white">
+                <td className="py-3.5 px-5 text-right font-semibold text-[#1D1D1F]">
                   {row.yearlyTonnes.toLocaleString()} t
                 </td>
-                <td className="py-3.5 px-5 text-[#C5D0C8]">
+                <td className="py-3.5 px-5 text-[#3A3A3C]">
                   <div className="flex items-center justify-between gap-3">
                     <span>{row.action}</span>
                     {row.complianceNote && (
-                      <span className="shrink-0 text-[10px] font-mono text-[#6E7E74] bg-[#0E1310] px-2 py-0.5 rounded-full border border-white/[0.06]">
+                      <span className="shrink-0 text-[10px] font-medium text-[#86868B] bg-[#F5F5F7] px-2 py-0.5 rounded-full">
                         {row.complianceNote}
                       </span>
                     )}
@@ -95,43 +94,43 @@ export const ManagementTable: React.FC<ManagementTableProps> = ({ items }) => {
       </div>
 
       {/* Mobile Stacked Cards */}
-      <div className="md:hidden space-y-2.5">
+      <div className="md:hidden space-y-3">
         {filteredItems.map((row) => (
           <div
             key={row.id}
-            className="rounded-xl border border-white/[0.08] bg-[#0A0D0B] p-4 text-xs space-y-2"
+            className="glass-card p-4 rounded-xl text-xs space-y-2.5"
           >
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-white flex items-center gap-2">
+              <span className="font-semibold text-[#1D1D1F] flex items-center gap-2">
                 <span
                   className={`h-2 w-2 rounded-full ${
-                    row.category === "construction" ? "bg-[#C8FF4A]" : "bg-[#67E8D1]"
+                    row.category === "construction" ? "bg-[#1D7A4B]" : "bg-[#0071E3]"
                   }`}
                 />
                 {row.stream}
               </span>
-              <span className="text-[10px] font-mono text-[#7A8A80] uppercase px-2 py-0.5 rounded-full bg-[#0E1310] border border-white/[0.06]">
+              <span className="text-[10px] font-medium text-[#86868B] uppercase px-2 py-0.5 rounded-full bg-[#F5F5F7]">
                 {row.category}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 bg-[#0E1310] p-2.5 rounded-lg border border-white/[0.04]">
+            <div className="grid grid-cols-2 gap-2 bg-[#F5F5F7] p-2.5 rounded-xl">
               <div>
-                <span className="text-[10px] text-[#7A8A80] block">Monthly Rate</span>
-                <span className="font-mono text-sm font-bold text-white">
+                <span className="text-[10px] text-[#86868B] block">Monthly Rate</span>
+                <span className="text-sm font-semibold text-[#1D1D1F]">
                   {row.monthlyTonnes.toLocaleString()} t
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-[#7A8A80] block">Annual / Total</span>
-                <span className="font-mono text-sm font-bold text-[#C8FF4A]">
+                <span className="text-[10px] text-[#86868B] block">Annual / Total</span>
+                <span className="text-sm font-semibold text-[#1D7A4B]">
                   {row.yearlyTonnes.toLocaleString()} t
                 </span>
               </div>
             </div>
 
-            <div className="text-[#A8B6AC] pt-1 flex items-start gap-1.5">
-              <ArrowUpRight className="h-3.5 w-3.5 text-[#C8FF4A] shrink-0 mt-0.5" />
+            <div className="text-[#3A3A3C] pt-0.5 flex items-start gap-1.5 leading-relaxed">
+              <ArrowUpRight className="h-3.5 w-3.5 text-[#1D7A4B] shrink-0 mt-0.5" />
               <span>{row.action}</span>
             </div>
           </div>

@@ -22,7 +22,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
   size = 140,
 }) => {
   const radius = 50;
-  const strokeWidth = 16;
+  const strokeWidth = 14;
   const circumference = 2 * Math.PI * radius;
 
   let accumulatedPercentage = 0;
@@ -35,13 +35,13 @@ export const DonutChart: React.FC<DonutChartProps> = ({
         viewBox="0 0 140 140"
         className="transform -rotate-90"
       >
-        {/* Background track */}
+        {/* Subtle background track */}
         <circle
           cx="70"
           cy="70"
           r={radius}
           fill="none"
-          stroke="#141A16"
+          stroke="#E5E5EA"
           strokeWidth={strokeWidth}
         />
 
@@ -63,18 +63,18 @@ export const DonutChart: React.FC<DonutChartProps> = ({
               strokeDasharray={`${Math.max(0, strokeLength - 1.5)} ${circumference}`}
               strokeDashoffset={-strokeOffset}
               strokeLinecap="round"
-              className="transition-all duration-500 ease-out"
+              className="transition-all duration-700 ease-out"
             />
           );
         })}
       </svg>
 
       {/* Center Label */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-        <span className="text-sm font-extrabold text-white leading-tight">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-2">
+        <span className="text-sm sm:text-base font-bold text-[#1D1D1F] leading-tight tracking-tight">
           {centerValue}
         </span>
-        <span className="text-[10px] text-[#8E9B92] leading-tight">
+        <span className="text-[10px] text-[#86868B] leading-tight mt-0.5">
           {centerLabel}
         </span>
       </div>

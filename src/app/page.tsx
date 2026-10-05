@@ -72,7 +72,7 @@ export default function Home() {
     }
   }, [input]);
 
-  // Initial calculation on mount so page presents immediate live intelligence matching reference
+  // Initial calculation on mount so page presents immediate live intelligence
   useEffect(() => {
     handleAnalyze();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,9 +80,9 @@ export default function Home() {
 
   return (
     <PageShell>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
-        {/* Left Column: 01 Project Input (5 cols on lg) */}
-        <aside className="lg:col-span-5 lg:sticky lg:top-20 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        {/* Left Column: Project Input (5 cols on lg) */}
+        <aside className="lg:col-span-5 lg:sticky lg:top-24 space-y-4">
           <ProjectForm
             input={input}
             onChange={setInput}
@@ -93,9 +93,9 @@ export default function Home() {
           />
 
           {generalError && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-xs text-red-200 space-y-2">
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-xs text-red-800 space-y-2 animate-fadeIn">
               <div className="flex items-center gap-2 font-semibold">
-                <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
+                <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
                 <span>Location Analysis Notice</span>
               </div>
               <p className="leading-relaxed opacity-90">{generalError}</p>
@@ -103,8 +103,8 @@ export default function Home() {
           )}
 
           {result?.climate.isFallback && (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200 flex items-start gap-2.5">
-              <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+            <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 text-xs text-amber-900 flex items-start gap-2.5 animate-fadeIn">
+              <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
               <div className="leading-relaxed">
                 <span className="font-semibold block mb-0.5">Climate Fallback Active</span>
                 {result.climate.statusMessage}
@@ -113,7 +113,7 @@ export default function Home() {
           )}
         </aside>
 
-        {/* Right Column: 02 Waste Analysis & 03 Waste Streams (7 cols on lg) */}
+        {/* Right Column: Waste Analysis & Streams (7 cols on lg) */}
         <section
           ref={resultsRef}
           aria-live="polite"
