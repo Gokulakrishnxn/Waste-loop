@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { AlertCircle, AlertTriangle } from "lucide-react";
 import { calculateProjectWaste } from "@/lib/calculator";
 import { ProjectInput, WasteResult } from "@/lib/calculator/types";
@@ -28,39 +28,38 @@ export default function Home() {
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   const resultsRef = useRef<HTMLDivElement>(null);
-  const isInitialLoad = useRef<boolean>(true);
 
-  const handleAnalyze = useCallback(async (isUserAction: boolean = false) => {
+  const handleAnalyze = useCallback(async () => {
     setIsLoading(true);
     setGeneralError(null);
     setLoadingStep(0);
 
     try {
-      // Step 1: Project parameters
-      await new Promise((r) => setTimeout(r, 180));
+      // Step 1: Validate & ingest project parameters
+      await new Promise((r) => setTimeout(r, 200));
       setLoadingStep(1);
 
-      // Step 2: Construction model
-      await new Promise((r) => setTimeout(r, 180));
+      // Step 2: Compute construction embodied waste
+      await new Promise((r) => setTimeout(r, 200));
       setLoadingStep(2);
 
-      // Step 3: Site climate telemetry
+      // Step 3: Fetch site climate telemetry
       const climate = await fetchClimateData(input.location);
-      await new Promise((r) => setTimeout(r, 180));
+      await new Promise((r) => setTimeout(r, 200));
       setLoadingStep(3);
 
-      // Step 4: Waste stream analysis
-      await new Promise((r) => setTimeout(r, 180));
+      // Step 4: Generate waste streams & circular management plan
+      await new Promise((r) => setTimeout(r, 200));
       const calculatedResult = calculateProjectWaste(input, climate);
 
       setResult(calculatedResult);
       setHasAnalyzed(true);
 
-      // Scroll to results only on mobile devices (< 768px) when triggered by an explicit user action
-      if (isUserAction && typeof window !== "undefined" && window.innerWidth < 768) {
+      // Scroll to results only on mobile devices (< 768px)
+      if (typeof window !== "undefined" && window.innerWidth < 768) {
         setTimeout(() => {
           resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
+        }, 120);
       }
     } catch (err: unknown) {
       const msg =
@@ -73,14 +72,6 @@ export default function Home() {
     }
   }, [input]);
 
-  // Initial calculation on mount without auto-scrolling
-  useEffect(() => {
-    if (isInitialLoad.current) {
-      isInitialLoad.current = false;
-      handleAnalyze(false);
-    }
-  }, [handleAnalyze]);
-
   return (
     <PageShell>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
@@ -89,7 +80,7 @@ export default function Home() {
           <ProjectForm
             input={input}
             onChange={setInput}
-            onAnalyze={() => handleAnalyze(true)}
+            onAnalyze={handleAnalyze}
             isLoading={isLoading}
             hasAnalyzed={hasAnalyzed}
             loadingStep={loadingStep}
@@ -116,13 +107,17 @@ export default function Home() {
           )}
         </aside>
 
-        {/* Right Column: Waste Analysis & Streams */}
+        {/* Right Column: Analysis Output (or EmptyState prior to calculation) */}
         <section
           ref={resultsRef}
           aria-live="polite"
           className="lg:col-span-7 xl:col-span-7 min-w-0"
         >
-          {result ? <AnalysisView result={result} /> : <EmptyState />}
+          {result ? (
+            <AnalysisView result={result} />
+          ) : (
+            <EmptyState isLoading={isLoading} loadingStep={loadingStep} />
+          )}
         </section>
       </div>
     </PageShell>
