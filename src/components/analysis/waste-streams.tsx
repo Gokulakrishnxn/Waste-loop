@@ -17,9 +17,8 @@ export const WasteStreams: React.FC<WasteStreamsProps> = ({
   operationalTotalTonnes,
   maintenanceTotalTonnes,
 }) => {
-  const [activeTab, setActiveTab] = useState<"construction" | "operational" | "maintenance">("construction");
+  const [activeTab, setActiveTab] = useState<"all" | "construction" | "operational" | "maintenance">("all");
 
-  // Refined palette inspired by Apple Design guidelines
   const constColors = ["#1D7A4B", "#34C759", "#30B0C7", "#0071E3", "#5E5CE6", "#8E8E93"];
   const constSegments: DonutSegment[] = constructionStreams.map((item, idx) => ({
     id: item.id,
@@ -47,128 +46,91 @@ export const WasteStreams: React.FC<WasteStreamsProps> = ({
     { id: "mep", label: "MEP fixtures & cabling", percentage: 8, tonnes: Math.round(maintenanceTotalTonnes * 0.08 * 10) / 10, color: maintColors[4] },
   ];
 
+  const showConstruction = activeTab === "all" || activeTab === "construction";
+  const showOperational = activeTab === "all" || activeTab === "operational";
+  const showMaintenance = activeTab === "maintenance";
+
   return (
-    <div className="space-y-4 sm:space-y-5">
-      {/* Waste Streams Header & Segmented Pill Switch */}
+    <div className="space-y-4 min-w-0">
+      {/* Waste Streams Header & Segmented Switch */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-black/[0.06]">
         <div>
-          <h3 className="text-base sm:text-lg font-semibold text-[#1D1D1F] tracking-tight">
+          <h3 className="text-base sm:text-lg font-bold text-[#1D1D1F] tracking-tight">
             Waste Streams Breakdown
           </h3>
-          <p className="text-[13px] text-[#86868B] mt-0.5">
-            Material and lifecycle distribution by phase.
+          <p className="text-xs text-[#86868B] mt-0.5">
+            Material and lifecycle distribution by operational phase.
           </p>
         </div>
 
-        {/* Segmented Switch */}
-        <div className="flex items-center rounded-full bg-[#F5F5F7] p-1 self-start sm:self-auto">
-          {(["construction", "operational", "maintenance"] as const).map((tab) => {
+        {/* Tab Switcher */}
+        <div className="flex items-center rounded-full bg-[#F5F5F7] p-1 self-start sm:self-auto border border-black/[0.04]">
+          {(["all", "construction", "operational", "maintenance"] as const).map((tab) => {
             const isSelected = activeTab === tab;
             return (
               <button
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-medium capitalize transition-all cursor-pointer ${
+                className={`rounded-full px-3 py-1 text-xs font-semibold capitalize transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-white text-[#1D1D1F] shadow-sm font-semibold"
+                    ? "bg-white text-[#1D1D1F] shadow-xs"
                     : "text-[#86868B] hover:text-[#1D1D1F]"
                 }`}
               >
-                {tab}
+                {tab === "all" ? "All Streams" : tab}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Breakdown Cards Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Card 1: Construction Waste Breakdown */}
-        <div
-          className={`glass-card p-5 sm:p-6 rounded-2xl transition-all ${
-            activeTab === "construction" ? "ring-2 ring-[#1D7A4B]/20" : ""
-          }`}
-        >
-          <div className="flex items-baseline justify-between pb-3 mb-4 border-b border-black/[0.06]">
-            <h4 className="text-sm font-semibold text-[#1D1D1F] tracking-tight">
-              Construction Waste
-            </h4>
-            <div className="text-xs text-[#86868B]">
-              <span className="font-bold text-[#1D1D1F]">
-                {constructionTotalTonnes.toLocaleString()} t
-              </span>{" "}
-              total
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            <DonutChart
-              segments={constSegments}
-              centerValue={`${constructionTotalTonnes.toLocaleString()} t`}
-              centerLabel="Total"
-              size={135}
-            />
-
-            {/* Legend */}
-            <div className="flex-1 w-full space-y-2 text-xs">
-              {constSegments.map((item) => (
-                <div key={item.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 truncate">
-                    <span
-                      className="h-2.5 w-2.5 rounded-full shrink-0"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span className="text-[#3A3A3C] truncate font-medium">{item.label}</span>
-                  </div>
-                  <div className="flex items-center gap-2.5 shrink-0 text-[12px]">
-                    <span className="text-[#86868B]">{item.tonnes} t</span>
-                    <span className="text-[#1D7A4B] font-semibold min-w-[32px] text-right">
-                      {item.percentage}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Operational Waste Breakdown (or Maintenance if tab selected) */}
-        {activeTab === "maintenance" ? (
-          <div className="glass-card p-5 sm:p-6 rounded-2xl ring-2 ring-[#8944AB]/20 transition-all">
+      {/* Cards Container with min-w-0 and clear grid column behavior */}
+      <div className={`grid gap-5 min-w-0 ${activeTab === "all" ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1"}`}>
+        {/* Construction Waste Card */}
+        {showConstruction && (
+          <div className="glass-card p-5 sm:p-6 rounded-2xl min-w-0 flex flex-col justify-between">
             <div className="flex items-baseline justify-between pb-3 mb-4 border-b border-black/[0.06]">
-              <h4 className="text-sm font-semibold text-[#1D1D1F] tracking-tight">
-                Maintenance Waste
-              </h4>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#1D7A4B]" />
+                <h4 className="text-sm font-bold text-[#1D1D1F] tracking-tight">
+                  Construction Waste
+                </h4>
+              </div>
               <div className="text-xs text-[#86868B]">
                 <span className="font-bold text-[#1D1D1F]">
-                  {maintenanceTotalTonnes.toLocaleString()} t
+                  {constructionTotalTonnes.toLocaleString()} t
                 </span>{" "}
-                / year
+                total
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <DonutChart
-                segments={maintStreams}
-                centerValue={`${maintenanceTotalTonnes.toLocaleString()} t`}
-                centerLabel="/ year"
-                size={135}
-              />
+            <div className="flex flex-col sm:flex-row items-center gap-6 min-w-0">
+              <div className="shrink-0 flex items-center justify-center">
+                <DonutChart
+                  segments={constSegments}
+                  centerValue={`${constructionTotalTonnes.toLocaleString()} t`}
+                  centerLabel="Total"
+                  size={135}
+                />
+              </div>
 
-              <div className="flex-1 w-full space-y-2 text-xs">
-                {maintStreams.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 truncate">
+              {/* Legend */}
+              <div className="flex-1 w-full min-w-0 space-y-2">
+                {constSegments.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2 min-w-0 truncate">
                       <span
-                        className="h-2.5 w-2.5 rounded-full shrink-0"
+                        className="h-2 w-2 rounded-full shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-[#3A3A3C] truncate font-medium">{item.label}</span>
+                      <span className="text-[#3A3A3C] font-medium truncate">
+                        {item.label}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2.5 shrink-0 text-[12px]">
+                    <div className="flex items-center gap-2.5 shrink-0 text-xs tabular-nums">
                       <span className="text-[#86868B]">{item.tonnes} t</span>
-                      <span className="text-[#8944AB] font-semibold min-w-[32px] text-right">
+                      <span className="text-[#1D7A4B] font-bold min-w-[32px] text-right">
                         {item.percentage}%
                       </span>
                     </div>
@@ -177,16 +139,18 @@ export const WasteStreams: React.FC<WasteStreamsProps> = ({
               </div>
             </div>
           </div>
-        ) : (
-          <div
-            className={`glass-card p-5 sm:p-6 rounded-2xl transition-all ${
-              activeTab === "operational" ? "ring-2 ring-[#0071E3]/20" : ""
-            }`}
-          >
+        )}
+
+        {/* Operational Waste Card */}
+        {showOperational && (
+          <div className="glass-card p-5 sm:p-6 rounded-2xl min-w-0 flex flex-col justify-between">
             <div className="flex items-baseline justify-between pb-3 mb-4 border-b border-black/[0.06]">
-              <h4 className="text-sm font-semibold text-[#1D1D1F] tracking-tight">
-                Operational Waste
-              </h4>
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#0071E3]" />
+                <h4 className="text-sm font-bold text-[#1D1D1F] tracking-tight">
+                  Operational Waste
+                </h4>
+              </div>
               <div className="text-xs text-[#86868B]">
                 <span className="font-bold text-[#1D1D1F]">
                   {operationalTotalTonnes.toLocaleString()} t
@@ -195,27 +159,86 @@ export const WasteStreams: React.FC<WasteStreamsProps> = ({
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <DonutChart
-                segments={opsSegments}
-                centerValue={`${operationalTotalTonnes.toLocaleString()} t`}
-                centerLabel="/ year"
-                size={135}
-              />
+            <div className="flex flex-col sm:flex-row items-center gap-6 min-w-0">
+              <div className="shrink-0 flex items-center justify-center">
+                <DonutChart
+                  segments={opsSegments}
+                  centerValue={`${operationalTotalTonnes.toLocaleString()} t`}
+                  centerLabel="/ year"
+                  size={135}
+                />
+              </div>
 
-              <div className="flex-1 w-full space-y-2 text-xs">
+              {/* Legend */}
+              <div className="flex-1 w-full min-w-0 space-y-2">
                 {opsSegments.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 truncate">
+                  <div key={item.id} className="flex items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2 min-w-0 truncate">
                       <span
-                        className="h-2.5 w-2.5 rounded-full shrink-0"
+                        className="h-2 w-2 rounded-full shrink-0"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-[#3A3A3C] truncate font-medium">{item.label}</span>
+                      <span className="text-[#3A3A3C] font-medium truncate">
+                        {item.label}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2.5 shrink-0 text-[12px]">
+                    <div className="flex items-center gap-2.5 shrink-0 text-xs tabular-nums">
                       <span className="text-[#86868B]">{item.tonnes} t</span>
-                      <span className="text-[#0071E3] font-semibold min-w-[32px] text-right">
+                      <span className="text-[#0071E3] font-bold min-w-[32px] text-right">
+                        {item.percentage}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Maintenance Waste Card */}
+        {showMaintenance && (
+          <div className="glass-card p-5 sm:p-6 rounded-2xl min-w-0 flex flex-col justify-between">
+            <div className="flex items-baseline justify-between pb-3 mb-4 border-b border-black/[0.06]">
+              <div className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#8944AB]" />
+                <h4 className="text-sm font-bold text-[#1D1D1F] tracking-tight">
+                  Maintenance Waste
+                </h4>
+              </div>
+              <div className="text-xs text-[#86868B]">
+                <span className="font-bold text-[#1D1D1F]">
+                  {maintenanceTotalTonnes.toLocaleString()} t
+                </span>{" "}
+                / year
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-6 min-w-0">
+              <div className="shrink-0 flex items-center justify-center">
+                <DonutChart
+                  segments={maintStreams}
+                  centerValue={`${maintenanceTotalTonnes.toLocaleString()} t`}
+                  centerLabel="/ year"
+                  size={135}
+                />
+              </div>
+
+              {/* Legend */}
+              <div className="flex-1 w-full min-w-0 space-y-2">
+                {maintStreams.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2 min-w-0 truncate">
+                      <span
+                        className="h-2 w-2 rounded-full shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-[#3A3A3C] font-medium truncate">
+                        {item.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2.5 shrink-0 text-xs tabular-nums">
+                      <span className="text-[#86868B]">{item.tonnes} t</span>
+                      <span className="text-[#8944AB] font-bold min-w-[32px] text-right">
                         {item.percentage}%
                       </span>
                     </div>

@@ -28,38 +28,39 @@ export default function Home() {
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const isInitialLoad = useRef<boolean>(true);
 
-  const handleAnalyze = useCallback(async () => {
+  const handleAnalyze = useCallback(async (isUserAction: boolean = false) => {
     setIsLoading(true);
     setGeneralError(null);
     setLoadingStep(0);
 
     try {
       // Step 1: Project parameters
-      await new Promise((r) => setTimeout(r, 220));
+      await new Promise((r) => setTimeout(r, 180));
       setLoadingStep(1);
 
       // Step 2: Construction model
-      await new Promise((r) => setTimeout(r, 220));
+      await new Promise((r) => setTimeout(r, 180));
       setLoadingStep(2);
 
       // Step 3: Site climate telemetry
       const climate = await fetchClimateData(input.location);
-      await new Promise((r) => setTimeout(r, 220));
+      await new Promise((r) => setTimeout(r, 180));
       setLoadingStep(3);
 
       // Step 4: Waste stream analysis
-      await new Promise((r) => setTimeout(r, 220));
+      await new Promise((r) => setTimeout(r, 180));
       const calculatedResult = calculateProjectWaste(input, climate);
 
       setResult(calculatedResult);
       setHasAnalyzed(true);
 
-      // Scroll to results smoothly on mobile viewports
-      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      // Scroll to results only on mobile devices (< 768px) when triggered by an explicit user action
+      if (isUserAction && typeof window !== "undefined" && window.innerWidth < 768) {
         setTimeout(() => {
           resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 120);
+        }, 100);
       }
     } catch (err: unknown) {
       const msg =
@@ -72,21 +73,23 @@ export default function Home() {
     }
   }, [input]);
 
-  // Initial calculation on mount so page presents immediate live intelligence
+  // Initial calculation on mount without auto-scrolling
   useEffect(() => {
-    handleAnalyze();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      handleAnalyze(false);
+    }
+  }, [handleAnalyze]);
 
   return (
     <PageShell>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        {/* Left Column: Project Input (5 cols on lg) */}
-        <aside className="lg:col-span-5 lg:sticky lg:top-24 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
+        {/* Left Column: Project Input */}
+        <aside className="lg:col-span-5 xl:col-span-5 space-y-4">
           <ProjectForm
             input={input}
             onChange={setInput}
-            onAnalyze={handleAnalyze}
+            onAnalyze={() => handleAnalyze(true)}
             isLoading={isLoading}
             hasAnalyzed={hasAnalyzed}
             loadingStep={loadingStep}
@@ -113,11 +116,11 @@ export default function Home() {
           )}
         </aside>
 
-        {/* Right Column: Waste Analysis & Streams (7 cols on lg) */}
+        {/* Right Column: Waste Analysis & Streams */}
         <section
           ref={resultsRef}
           aria-live="polite"
-          className="lg:col-span-7 min-w-0"
+          className="lg:col-span-7 xl:col-span-7 min-w-0"
         >
           {result ? <AnalysisView result={result} /> : <EmptyState />}
         </section>
